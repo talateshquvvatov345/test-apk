@@ -21,7 +21,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev unzip
+        sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev unzip openjdk-17-jdk
         pip install buildozer cython
 
     - name: Install Android SDK
@@ -32,7 +32,7 @@ jobs:
         mv $HOME/android-sdk/cmdline-tools/latest/cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest/
         export ANDROID_HOME=$HOME/android-sdk
         export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
-        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME "platforms;android-33" "build-tools;33.0.0"
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME "platforms;android-33" "build-tools;33.0.0" "platform-tools"
 
     - name: Install Android NDK
       run: |
@@ -42,8 +42,11 @@ jobs:
 
     - name: Set up Buildozer environment
       run: |
-        mkdir -p $HOME/.buildozer/android/platform/android-sdk/build-tools
+        mkdir -p $HOME/.buildozer/android/platform/android-sdk/build-tools/33.0.0
+        ln -s $ANDROID_HOME $HOME/.buildozer/android/platform/android-sdk
         ln -s $ANDROID_HOME/build-tools/33.0.0 $HOME/.buildozer/android/platform/android-sdk/build-tools/33.0.0
+        export ANDROIDSDK=$HOME/.buildozer/android/platform/android-sdk
+        export ANDROIDNDK=$ANDROID_NDK_HOME
 
     - name: Build APK
       run: |
