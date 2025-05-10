@@ -40,6 +40,11 @@ jobs:
         unzip android-ndk-r21e-linux-x86_64.zip -d $HOME
         export ANDROID_NDK_HOME=$HOME/android-ndk-r21e
 
+    - name: Set up Buildozer environment
+      run: |
+        mkdir -p $HOME/.buildozer/android/platform/android-sdk/build-tools
+        ln -s $ANDROID_HOME/build-tools/33.0.0 $HOME/.buildozer/android/platform/android-sdk/build-tools/33.0.0
+
     - name: Build APK
       run: |
         buildozer android debug
