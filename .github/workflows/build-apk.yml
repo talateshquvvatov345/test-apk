@@ -42,9 +42,16 @@ jobs:
 
     - name: Set up Buildozer environment
       run: |
+        # Create Buildozer's expected SDK directory structure
+        mkdir -p $HOME/.buildozer/android/platform/android-sdk/tools/bin
         mkdir -p $HOME/.buildozer/android/platform/android-sdk/build-tools/33.0.0
+        # Symlink the entire SDK
         ln -s $ANDROID_HOME $HOME/.buildozer/android/platform/android-sdk
+        # Symlink build-tools
         ln -s $ANDROID_HOME/build-tools/33.0.0 $HOME/.buildozer/android/platform/android-sdk/build-tools/33.0.0
+        # Symlink sdkmanager to the expected location
+        ln -s $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager $HOME/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
+        # Set environment variables for Buildozer
         export ANDROIDSDK=$HOME/.buildozer/android/platform/android-sdk
         export ANDROIDNDK=$ANDROID_NDK_HOME
 
