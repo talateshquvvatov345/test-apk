@@ -21,16 +21,18 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev
+        sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev unzip
         pip install buildozer
 
     - name: Install Android SDK
       run: |
         wget -q https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
-        unzip commandlinetools-linux-8512546_latest.zip -d $HOME/android-sdk
+        mkdir -p $HOME/android-sdk/cmdline-tools/latest
+        unzip commandlinetools-linux-8512546_latest.zip -d $HOME/android-sdk/cmdline-tools/latest
+        mv $HOME/android-sdk/cmdline-tools/latest/cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest/
         export ANDROID_HOME=$HOME/android-sdk
-        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/bin
-        yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager "platforms;android-33" "build-tools;33.0.0"
+        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME "platforms;android-33" "build-tools;33.0.0"
 
     - name: Install Android NDK
       run: |
